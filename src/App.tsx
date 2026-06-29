@@ -1077,21 +1077,21 @@ function getSurveyTone(scope: string) {
 function getHabitSummary(category: CategoryKey, checked: number) {
   if (checked === 0) {
     const summaries: Record<CategoryKey, string> = {
-      pressure: '짠 음식과 국물 섭취는 비교적 안정적으로 보여요.',
-      glucose: '단 음료와 탄수화물 섭취 균형은 비교적 안정적으로 보여요.',
-      muscle: '단백질 섭취와 활동 습관은 비교적 안정적으로 보여요.',
-      nutrition: '식사량과 체중 변화는 비교적 안정적으로 보여요.',
-      gut: '수분과 장 건강 관련 습관은 비교적 안정적으로 보여요.',
+      pressure: '현재 식습관에서 크게 점검이 필요한 부분은 보이지 않아요.',
+      glucose: '현재 식습관에서 크게 점검이 필요한 부분은 보이지 않아요.',
+      muscle: '현재 식습관에서 크게 점검이 필요한 부분은 보이지 않아요.',
+      nutrition: '현재 식습관에서 크게 점검이 필요한 부분은 보이지 않아요.',
+      gut: '현재 식습관에서 크게 점검이 필요한 부분은 보이지 않아요.',
     }
 
     return summaries[category]
   }
 
   const summaries: Record<CategoryKey, string> = {
-    pressure: '짠 음식·국물 섭취가 잦은 편이에요.',
-    glucose: '단 음료·탄수화물 위주 식사가 잦은 편이에요.',
+    pressure: '짠 음식이나 국물 음식을 자주 드시는 편이에요.',
+    glucose: '단 음료나 간식 섭취가 자주 있는 편이에요.',
     muscle: '단백질 섭취나 활동량을 점검해보면 좋아요.',
-    nutrition: '식사량·체중 변화가 신경 쓰이는 흐름이에요.',
+    nutrition: '식사량이나 체중 변화를 함께 살펴보면 좋아요.',
     gut: '수분·식이섬유 섭취와 배변 상태를 함께 점검해보면 좋아요.',
   }
 
