@@ -555,7 +555,7 @@ function Home({
         <div>
           <p className="today-label">{todayLabel}</p>
           <h2>오늘 식사 기록을 남겨볼까요?</h2>
-          <p>가볍게 기록해두면 나중에 식습관을 돌아보는 데 도움이 돼요.</p>
+          <p>가볍게 기록해보세요.</p>
         </div>
       </section>
 
