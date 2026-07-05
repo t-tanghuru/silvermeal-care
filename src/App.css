@@ -187,6 +187,7 @@ p {
 .guide-card p,
 .settings-panel p,
 .notice-panel p,
+.summary-chip-panel p,
 .home-actions span {
   color: #5c6963;
   line-height: 1.65;

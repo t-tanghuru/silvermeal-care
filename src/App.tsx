@@ -538,10 +538,15 @@ function Home({
     weekday: 'long',
   }).format(new Date())
   const todayLogs = logs.filter((log) => log.date === today)
+  const summaryText = hasCheckResult
+    ? highlighted.length > 0
+      ? '다음 영역을 함께 점검해보면 좋아요.'
+      : '점검한 영역 모두 특별히 살펴볼 부분이 없어요.'
+    : '식습관 점검을 완료하면 결과가 여기에 표시돼요.'
   const summaryChips = hasCheckResult
     ? highlighted.length > 0
       ? highlighted.slice(0, 3).map((category) => category.title)
-      : ['현재 양호']
+      : ['전체 양호']
     : ['점검 전']
 
   return (
@@ -549,14 +554,8 @@ function Home({
       <section className="home-hero">
         <div>
           <p className="today-label">{todayLabel}</p>
-          <h2>오늘 식사 기록을 확인해볼까요?</h2>
-          <p>
-            {hasCheckResult
-              ? highlighted.length > 0
-                ? `${highlighted.length}개 영역에서 식습관 점검이 필요해요.`
-                : '현재 응답 기준으로 주요 식습관은 안정적으로 보여요.'
-              : '식습관 점검을 완료하면 요약 결과가 여기에 표시돼요.'}
-          </p>
+          <h2>오늘 식사 기록을 남겨볼까요?</h2>
+          <p>가볍게 기록해두면 나중에 식습관을 돌아보는 데 도움이 돼요.</p>
         </div>
       </section>
 
@@ -579,6 +578,7 @@ function Home({
 
       <section className="summary-chip-panel">
         <h2>식습관 점검 요약</h2>
+        <p>{summaryText}</p>
         <div className="summary-chips">
           {summaryChips.map((chip) => (
             <span key={chip}>{chip}</span>
