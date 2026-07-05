@@ -20,6 +20,8 @@ type Question = {
   category: CategoryKey
   stepLabel: string
   text: string
+  // true면 '아니요' 응답이 점검이 필요한 신호예요 (긍정형 문항)
+  positive?: boolean
 }
 
 type MealLog = {
@@ -45,71 +47,141 @@ const categories: Category[] = [
     key: 'pressure',
     title: '혈압 관리',
     icon: '🫀',
-    short: '나트륨, 짠 음식, 국물 음식 습관 확인',
-    detail: '혈압 관리가 걱정된다면 짠 음식, 국물 음식, 가공식품 섭취 빈도를 점검합니다.',
+    short: '짠 음식, 국물 음식, 가공식품 습관 확인',
+    detail:
+      '혈압 관리가 걱정된다면 짠 음식, 국물 음식, 가공식품 섭취 습관을 점검해보면 도움이 돼요. 두통이나 어지러움을 자주 느낀다면 나트륨 섭취 습관부터 함께 살펴보세요.',
     nutrients: ['나트륨', '칼륨'],
-    habits: ['짠 음식', '국물 음식', '가공식품'],
-    guide: '국물 섭취를 줄이고, 음식 간을 조금 싱겁게 조절하는 습관부터 확인해보세요.',
+    habits: ['짠 음식', '국물 음식', '가공식품 섭취'],
+    guide:
+      '국물은 적게 먹고 음식 간을 싱겁게 조절해보세요. 시금치, 브로콜리, 토마토, 바나나처럼 칼륨이 풍부한 식품과 규칙적인 걷기도 도움이 돼요.',
   },
   {
     key: 'glucose',
     title: '혈당 관리',
     icon: '🍚',
-    short: '탄수화물, 당류, 간식 섭취 균형 확인',
-    detail: '혈당 관리가 걱정된다면 단 음료, 간식, 흰쌀밥이나 면 위주의 식사 빈도를 점검합니다.',
+    short: '단 음료, 간식, 식사 시간 확인',
+    detail:
+      '혈당 관리가 걱정된다면 단 음료, 간식, 불규칙한 식사 시간을 점검해보면 도움이 돼요. 식후 졸림이 심하거나 쉽게 피로하다면 식사 습관을 함께 살펴보세요.',
     nutrients: ['탄수화물', '당류', '식이섬유'],
-    habits: ['단 음료', '간식', '식사 균형'],
-    guide: '탄수화물 위주의 식사에 채소와 단백질 식품을 함께 구성해보세요.',
+    habits: ['단 음료', '간식', '규칙적인 식사시간'],
+    guide:
+      '규칙적인 식사 시간을 지키고 간식을 줄이며, 현미·채소·콩류·고구마 같은 식이섬유 식품을 챙겨보세요. 식사 후 20~30분 정도 걷는 것도 도움이 돼요.',
   },
   {
     key: 'muscle',
     title: '근육 건강',
     icon: '💪',
-    short: '단백질 섭취와 활동량 확인',
-    detail: '근육 건강이 걱정되는 경우 단백질 식품 섭취와 활동량을 함께 점검합니다.',
+    short: '단백질 섭취, 활동량, 체중 변화 확인',
+    detail:
+      '근육은 걷기, 균형 잡기, 자세 유지 같은 일상 움직임에 중요한 역할을 해요. 무릎이나 허리가 자주 불편하다면 단백질 섭취와 활동량을 점검해보면 좋아요.',
     nutrients: ['단백질', '비타민 D', '칼슘'],
-    habits: ['단백질 식품 섭취', '활동량', '체중 변화'],
-    guide: '매 끼니 단백질 식품을 포함하고, 가능한 범위에서 규칙적인 활동을 이어가보세요.',
+    habits: ['단백질 섭취량', '식사 거르기', '유제품 섭취 여부'],
+    guide:
+      '매 끼니 달걀, 생선, 두부, 우유·요거트 같은 단백질 식품을 하나씩 챙기고, 주 2~3회 걷기나 근력 운동을 이어가보면 좋아요.',
   },
   {
     key: 'nutrition',
     title: '영양 보충',
     icon: '🥣',
-    short: '식사량, 체중 변화, 식욕 저하 확인',
-    detail: '식사량이 줄거나 체중 변화가 있다면 열량과 단백질 섭취를 함께 점검합니다.',
+    short: '식사량, 규칙적인 식사, 편식 확인',
+    detail:
+      '식사량이 줄거나 체중 변화가 있다면 편식 여부와 식사 횟수를 함께 점검해보면 도움이 돼요. 기력이 떨어지거나 활동이 힘들게 느껴질 때도 함께 살펴보세요.',
     nutrients: ['열량', '단백질', '수분'],
-    habits: ['식사량 변화', '식욕', '체중 변화'],
-    guide: '식사량이 적은 날에는 소량의 간식이나 단백질 식품을 나누어 챙겨보세요.',
+    habits: ['식사량 변화', '편식', '체중 변화'],
+    guide:
+      '생선, 달걀, 우유, 과일처럼 영양 밀도가 높은 식품을 조금씩 자주 드시고, 규칙적인 식사 시간을 지켜보면 좋아요.',
   },
   {
     key: 'gut',
     title: '장 건강',
     icon: '💧',
     short: '수분, 식이섬유, 배변 상태 확인',
-    detail: '배변이 불편하거나 수분 섭취가 적다면 물과 식이섬유 섭취 습관을 점검합니다.',
+    detail:
+      '배변이 불편하거나 속이 자주 더부룩하다면 수분과 식이섬유 섭취 습관을 점검해보면 도움이 돼요.',
     nutrients: ['수분', '식이섬유'],
-    habits: ['수분 섭취', '채소/과일 섭취', '배변 상태'],
-    guide: '물 섭취와 채소, 과일, 잡곡 등 식이섬유가 있는 식품을 함께 확인해보세요.',
+    habits: ['물 섭취량', '채소·과일 섭취', '배변 상태'],
+    guide:
+      '충분한 물과 브로콜리, 양배추, 사과, 바나나, 귀리 같은 식이섬유 식품을 함께 챙기고, 가벼운 운동으로 혈액순환을 돕는 것도 좋아요.',
   },
 ]
 
-const surveyScope = ['혈압', '혈당', '단백질', '수분', '체중', '장 건강']
+const surveyScope = categories.map((category) => category.title)
 
 const questions: Question[] = [
-  { id: 'q1', category: 'pressure', stepLabel: '혈압', text: '짠 음식을 자주 먹는 편인가요?' },
-  { id: 'q2', category: 'pressure', stepLabel: '혈압', text: '국물 음식이나 가공식품을 자주 먹나요?' },
-  { id: 'q3', category: 'glucose', stepLabel: '혈당', text: '단 음료나 단 간식을 자주 먹는 편인가요?' },
-  { id: 'q4', category: 'glucose', stepLabel: '혈당', text: '흰쌀밥, 빵, 면 위주의 식사가 많은 편인가요?' },
-  { id: 'q5', category: 'muscle', stepLabel: '단백질', text: '단백질 식품을 자주 섭취하지 않는 편인가요?' },
-  { id: 'q6', category: 'muscle', stepLabel: '단백질', text: '최근 활동량이 줄었다고 느끼나요?' },
-  { id: 'q7', category: 'muscle', stepLabel: '단백질', text: '걷기나 계단 오르기가 예전보다 힘들게 느껴지나요?' },
-  { id: 'q8', category: 'gut', stepLabel: '수분', text: '물을 적게 마시는 편인가요?' },
-  { id: 'q9', category: 'gut', stepLabel: '수분', text: '하루 동안 물을 따로 챙겨 마시는 일이 적은 편인가요?' },
-  { id: 'q10', category: 'nutrition', stepLabel: '체중', text: '최근 식사량이 줄었다고 느끼나요?' },
-  { id: 'q11', category: 'nutrition', stepLabel: '체중', text: '최근 체중이 감소했거나 식욕이 떨어졌나요?' },
-  { id: 'q12', category: 'gut', stepLabel: '장 건강', text: '채소나 과일을 적게 먹는 편인가요?' },
-  { id: 'q13', category: 'gut', stepLabel: '장 건강', text: '배변이 원활하지 않다고 느끼나요?' },
-  { id: 'q14', category: 'gut', stepLabel: '장 건강', text: '잡곡, 콩류, 해조류 같은 식이섬유 식품을 적게 먹는 편인가요?' },
+  { id: 'q1', category: 'pressure', stepLabel: '혈압 관리', text: '국물 음식이나 찌개를 자주 드시나요?' },
+  {
+    id: 'q2',
+    category: 'pressure',
+    stepLabel: '혈압 관리',
+    text: '젓갈, 김치, 햄, 라면 같은 짠 음식을 자주 드시나요?',
+  },
+  { id: 'q3', category: 'pressure', stepLabel: '혈압 관리', text: '두통이나 어지러움을 자주 느끼나요?' },
+  {
+    id: 'q4',
+    category: 'pressure',
+    stepLabel: '혈압 관리',
+    text: '평소 혈압이 높다는 이야기를 들은 적이 있나요?',
+  },
+  { id: 'q5', category: 'glucose', stepLabel: '혈당 관리', text: '식사 후 졸림이 자주 심한 편인가요?' },
+  { id: 'q6', category: 'glucose', stepLabel: '혈당 관리', text: '단 음식이나 음료를 거의 매일 드시나요?' },
+  { id: 'q7', category: 'glucose', stepLabel: '혈당 관리', text: '식사 시간이 불규칙한 편인가요?' },
+  {
+    id: 'q8',
+    category: 'glucose',
+    stepLabel: '혈당 관리',
+    text: '물을 많이 마시거나 소변을 자주 보는 편인가요?',
+  },
+  { id: 'q9', category: 'muscle', stepLabel: '근육 건강', text: '최근 3개월 동안 체중이 줄었나요?' },
+  {
+    id: 'q10',
+    category: 'muscle',
+    stepLabel: '근육 건강',
+    text: '의자에서 일어나거나 계단을 오르는 것이 힘들게 느껴지나요?',
+  },
+  {
+    id: 'q11',
+    category: 'muscle',
+    stepLabel: '근육 건강',
+    text: '일주일에 3회 이상 고기, 생선, 달걀, 두부 같은 단백질 식품을 드시나요?',
+    positive: true,
+  },
+  {
+    id: 'q12',
+    category: 'muscle',
+    stepLabel: '근육 건강',
+    text: '일주일에 2회 이상 걷기나 근력운동을 하시나요?',
+    positive: true,
+  },
+  { id: 'q13', category: 'nutrition', stepLabel: '영양 보충', text: '최근 식사량이 줄었다고 느끼나요?' },
+  { id: 'q14', category: 'nutrition', stepLabel: '영양 보충', text: '최근 3개월 동안 체중이 줄었나요?' },
+  {
+    id: 'q15',
+    category: 'nutrition',
+    stepLabel: '영양 보충',
+    text: '하루 세 끼를 규칙적으로 드시나요?',
+    positive: true,
+  },
+  { id: 'q16', category: 'nutrition', stepLabel: '영양 보충', text: '편식을 자주 하는 편인가요?' },
+  {
+    id: 'q17',
+    category: 'gut',
+    stepLabel: '장 건강',
+    text: '일주일에 3회 이상 배변이 어렵거나 변비가 있다고 느끼나요?',
+  },
+  {
+    id: 'q18',
+    category: 'gut',
+    stepLabel: '장 건강',
+    text: '하루 물을 6잔(약 1.2L) 이상 드시나요?',
+    positive: true,
+  },
+  { id: 'q19', category: 'gut', stepLabel: '장 건강', text: '채소와 과일을 매일 드시나요?', positive: true },
+  {
+    id: 'q20',
+    category: 'gut',
+    stepLabel: '장 건강',
+    text: '배가 자주 더부룩하거나 복부 팽만감을 느끼나요?',
+  },
 ]
 
 const initialLogs: MealLog[] = []
@@ -142,18 +214,22 @@ function App() {
 
   const categoryScores = useMemo<CategoryScore[]>(() => {
     return categories.map((category) => {
-      const checkedQuestions = questions
+      const concerningQuestions = questions
         .filter((question) => question.category === category.key)
-        .filter((question) => answers[question.id])
+        .filter((question) => isConcerningAnswer(question, answers[question.id]))
       const level =
-        checkedQuestions.length >= 3 ? '관리 참고' : checkedQuestions.length >= 1 ? '점검 필요' : '양호'
+        concerningQuestions.length >= 3
+          ? '관리 참고'
+          : concerningQuestions.length >= 1
+            ? '점검 필요'
+            : '양호'
 
       return {
         ...category,
-        checked: checkedQuestions.length,
+        checked: concerningQuestions.length,
         level,
-        summary: getHabitSummary(category.key, checkedQuestions.length),
-        reasons: checkedQuestions.map((question) => question.text),
+        summary: getHabitSummary(category.key, concerningQuestions.length),
+        reasons: concerningQuestions.map((question) => question.text),
       }
     })
   }, [answers])
@@ -302,7 +378,7 @@ function Onboarding({
               <br />
               짧게 확인해요
             </p>
-            <p className="survey-meta">약 3분 · 14개 항목</p>
+            <p className="survey-meta">약 4분 · 20개 항목</p>
             <div className="scope-badges intro-badges">
               {surveyScope.map((item) => (
                 <span key={item}>{item}</span>
@@ -1063,15 +1139,19 @@ function formatKoreanDate(value: string) {
 
 function getSurveyTone(scope: string) {
   const tones: Record<string, { main: string; soft: string; border: string }> = {
-    혈압: { main: '#a65f48', soft: '#f5e7df', border: '#e3c3b5' },
-    혈당: { main: '#7763a8', soft: '#ece8f7', border: '#cbc2e5' },
-    단백질: { main: '#3f7b5a', soft: '#e6f2ea', border: '#bdd8c6' },
-    수분: { main: '#427f8c', soft: '#e4f1f3', border: '#b9d6dc' },
-    체중: { main: '#9a743c', soft: '#f3eadb', border: '#dcc59f' },
-    '장 건강': { main: '#43806d', soft: '#e3f0eb', border: '#b8d5ca' },
+    '혈압 관리': { main: '#a65f48', soft: '#f5e7df', border: '#e3c3b5' },
+    '혈당 관리': { main: '#7763a8', soft: '#ece8f7', border: '#cbc2e5' },
+    '근육 건강': { main: '#3f7b5a', soft: '#e6f2ea', border: '#bdd8c6' },
+    '영양 보충': { main: '#9a743c', soft: '#f3eadb', border: '#dcc59f' },
+    '장 건강': { main: '#427f8c', soft: '#e4f1f3', border: '#b9d6dc' },
   }
 
-  return tones[scope] ?? tones['단백질']
+  return tones[scope] ?? tones['근육 건강']
+}
+
+function isConcerningAnswer(question: Question, answer: boolean | undefined) {
+  if (answer === undefined) return false
+  return question.positive ? answer === false : answer === true
 }
 
 function getHabitSummary(category: CategoryKey, checked: number) {
