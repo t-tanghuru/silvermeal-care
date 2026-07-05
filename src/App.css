@@ -138,7 +138,7 @@ p {
   background: #edf6ef;
   border-radius: 999px;
   color: #356b4c;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
   padding: 8px 10px;
 }
@@ -247,8 +247,7 @@ p {
 
 .metric-grid,
 .result-grid,
-.guide-grid,
-.concern-grid {
+.guide-grid {
   display: grid;
   gap: 14px;
 }
@@ -265,7 +264,7 @@ p {
 
 .metric-card span {
   color: #65716b;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
 }
 
@@ -357,7 +356,7 @@ p {
   background: #e5f4ea;
   border-radius: 999px;
   color: #1d6f49;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
   padding: 8px 10px;
 }
@@ -406,7 +405,7 @@ p {
 .form-panel label {
   color: #39443f;
   display: grid;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
   gap: 7px;
 }
@@ -415,7 +414,7 @@ p {
 .water-field {
   color: #39443f;
   display: grid;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
   gap: 8px;
 }
@@ -434,12 +433,6 @@ select {
   min-height: 42px;
   padding: 9px 10px;
   width: 100%;
-}
-
-input[type='checkbox'] {
-  accent-color: #2d875a;
-  min-height: auto;
-  width: auto;
 }
 
 .date-field details {
@@ -462,11 +455,10 @@ input[type='checkbox'] {
   display: none;
 }
 
-.date-field summary::after {
+.date-field-hint {
   color: #65716b;
-  content: '날짜 변경';
   float: right;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
 }
 
@@ -518,7 +510,7 @@ input[type='checkbox'] {
   border: 1px solid #e3ded2;
   border-radius: 999px;
   color: #46524d;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
   min-height: 38px;
 }
@@ -554,7 +546,7 @@ input[type='checkbox'] {
 
 .protein-toggle small {
   color: #65716b;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
 }
 
@@ -594,15 +586,13 @@ input[type='checkbox'] {
   transform: translateX(24px);
 }
 
-.checkbox-line,
-.question-item {
-  align-items: center;
-  display: flex !important;
+.log-list,
+.question-list {
+  display: grid;
   gap: 10px;
 }
 
-.log-list,
-.question-list {
+.recheck-group {
   display: grid;
   gap: 10px;
 }
@@ -639,7 +629,7 @@ input[type='checkbox'] {
 .log-item span {
   color: #65716b;
   display: block;
-  font-size: 13px;
+  font-size: 15px;
   margin-top: 4px;
 }
 
@@ -693,7 +683,7 @@ input[type='checkbox'] {
 .level-badge {
   border-radius: 999px;
   display: inline-flex;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 900;
   justify-self: start;
   padding: 8px 10px;
@@ -778,7 +768,7 @@ input[type='checkbox'] {
   border: 1px solid #c8ddcf;
   border-radius: 999px;
   color: #2d6f4d;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
   padding: 7px 10px;
 }
@@ -896,7 +886,7 @@ input[type='checkbox'] {
 .intro-badges span {
   background: #edf6ef;
   color: #356b4c;
-  font-size: 13px;
+  font-size: 15px;
   padding: 8px 10px;
 }
 
@@ -909,7 +899,7 @@ input[type='checkbox'] {
 .category-stepbar span {
   background: #e4ded0;
   color: #6d746f;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
   min-height: 44px;
   padding: 13px 8px;
@@ -999,41 +989,6 @@ input[type='checkbox'] {
   color: #ffffff;
 }
 
-.concern-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.concern-grid button {
-  background: #f8f6ef;
-  border: 1px solid #ded8ca;
-  border-radius: 8px;
-  color: #17211e;
-  cursor: pointer;
-  display: grid;
-  gap: 6px;
-  min-height: 142px;
-  padding: 18px;
-  text-align: left;
-}
-
-.concern-grid button.selected {
-  background: #e5f4ea;
-  border-color: #2d875a;
-}
-
-.concern-grid span {
-  font-size: 28px;
-}
-
-.concern-grid strong {
-  font-size: 20px;
-}
-
-.concern-grid small {
-  color: #5c6963;
-  line-height: 1.5;
-}
-
 .onboarding-actions {
   display: flex;
   gap: 10px;
@@ -1081,7 +1036,7 @@ input[type='checkbox'] {
 .settings-panel label {
   color: #39443f;
   display: grid;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 900;
   gap: 7px;
 }
@@ -1102,8 +1057,7 @@ input[type='checkbox'] {
   .result-grid,
   .guide-grid,
   .settings-grid,
-  .form-panel,
-  .concern-grid {
+  .form-panel {
     grid-template-columns: 1fr;
   }
 

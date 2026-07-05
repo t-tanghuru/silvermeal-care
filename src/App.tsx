@@ -235,18 +235,24 @@ function App() {
   }, [answers])
 
   const weeklySummary = useMemo(() => {
+    const cutoff = new Date()
+    cutoff.setDate(cutoff.getDate() - 6)
+    const cutoffValue = cutoff.toLocaleDateString('sv-SE')
+    const recentLogs = logs.filter((log) => log.date >= cutoffValue)
+    const count = recentLogs.length
     const averageMeal =
-      logs.reduce((sum, log) => sum + amountScore[log.amount], 0) / Math.max(logs.length, 1)
-    const totalWater = logs.reduce((sum, log) => sum + log.water, 0)
-    const proteinMeals = logs.filter((log) => log.protein).length
+      recentLogs.reduce((sum, log) => sum + amountScore[log.amount], 0) / Math.max(count, 1)
+    const totalWater = recentLogs.reduce((sum, log) => sum + log.water, 0)
+    const proteinMeals = recentLogs.filter((log) => log.protein).length
 
     return {
       averageMeal,
+      count,
       totalWater,
       proteinMeals,
-      needsMealCheck: averageMeal < 0.7,
-      needsWaterCheck: totalWater < 1500,
-      needsProteinCheck: proteinMeals < Math.ceil(logs.length / 2),
+      needsMealCheck: count > 0 && averageMeal < 0.7,
+      needsWaterCheck: count > 0 && totalWater < 1500,
+      needsProteinCheck: count > 0 && proteinMeals < Math.ceil(count / 2),
     }
   }, [logs])
 
@@ -512,6 +518,7 @@ function Home({
   onMoveTab: (tab: MainTab) => void
   weeklySummary: {
     averageMeal: number
+    count: number
     totalWater: number
     proteinMeals: number
     needsMealCheck: boolean
@@ -571,13 +578,16 @@ function Home({
 
       <section className="metric-grid">
         <Metric
-          label="평균 식사량"
-          value={logs.length > 0 ? `${Math.round(weeklySummary.averageMeal * 100)}%` : '-'}
+          label="최근 7일 평균 식사량"
+          value={weeklySummary.count > 0 ? `${Math.round(weeklySummary.averageMeal * 100)}%` : '-'}
         />
-        <Metric label="기록 수분량" value={logs.length > 0 ? `${weeklySummary.totalWater}ml` : '-'} />
         <Metric
-          label="단백질 포함"
-          value={logs.length > 0 ? `${weeklySummary.proteinMeals}/${logs.length}회` : '-'}
+          label="최근 7일 수분량"
+          value={weeklySummary.count > 0 ? `${weeklySummary.totalWater}ml` : '-'}
+        />
+        <Metric
+          label="최근 7일 단백질 포함"
+          value={weeklySummary.count > 0 ? `${weeklySummary.proteinMeals}/${weeklySummary.count}회` : '-'}
         />
       </section>
 
@@ -603,16 +613,14 @@ function Home({
       </section>
 
       <section className="report-panel">
-        <h2>이번 주 점검 메모</h2>
+        <h2>최근 7일 점검 메모</h2>
         <ul>
-          {logs.length === 0 && <li>식사 기록이 쌓이면 주간 점검 메모가 표시됩니다.</li>}
-          {logs.length > 0 && weeklySummary.needsMealCheck && (
-            <li>최근 식사량이 낮게 나타나 식사량 변화를 확인해보세요.</li>
-          )}
-          {logs.length > 0 && weeklySummary.needsWaterCheck && (
+          {weeklySummary.count === 0 && <li>식사 기록이 쌓이면 최근 7일 점검 메모가 표시됩니다.</li>}
+          {weeklySummary.needsMealCheck && <li>최근 식사량이 낮게 나타나 식사량 변화를 확인해보세요.</li>}
+          {weeklySummary.needsWaterCheck && (
             <li>기록된 수분 섭취량이 낮아 섭취 가능한 수분원을 확인해보세요.</li>
           )}
-          {logs.length > 0 && weeklySummary.needsProteinCheck && (
+          {weeklySummary.needsProteinCheck && (
             <li>단백질 식품이 포함된 식사가 적어 섭취 여부를 점검해보세요.</li>
           )}
         </ul>
@@ -642,7 +650,10 @@ function Meals({
         <div className="date-field wide">
           <span>날짜</span>
           <details>
-            <summary>{formatKoreanDate(draftLog.date)}</summary>
+            <summary>
+              {formatKoreanDate(draftLog.date)}
+              <span className="date-field-hint">날짜 변경</span>
+            </summary>
             <label>
               날짜 변경
               <input
@@ -1015,17 +1026,49 @@ function QuestionList({
   onToggleAnswer: (id: string) => void
 }) {
   return (
-    <div className="question-list">
-      {questions.map((question) => (
-        <label className="question-item" key={question.id}>
-          <input
-            checked={Boolean(answers[question.id])}
-            onChange={() => onToggleAnswer(question.id)}
-            type="checkbox"
-          />
-          <span>{question.text}</span>
-        </label>
-      ))}
+    <div className="stack">
+      {categories.map((category) => {
+        const categoryQuestions = questions.filter((question) => question.category === category.key)
+        const tone = getSurveyTone(category.title)
+
+        return (
+          <div className="recheck-group" key={category.key}>
+            <p
+              className="category-cue"
+              style={
+                {
+                  '--tone': tone.main,
+                  '--tone-soft': tone.soft,
+                  '--tone-border': tone.border,
+                } as CSSProperties
+              }
+            >
+              {category.icon} {category.title}
+            </p>
+            <div className="question-list">
+              {categoryQuestions.map((question) => {
+                const isChecked = Boolean(answers[question.id])
+
+                return (
+                  <button
+                    aria-pressed={isChecked}
+                    className={`protein-toggle ${isChecked ? 'active' : ''}`}
+                    key={question.id}
+                    onClick={() => onToggleAnswer(question.id)}
+                    type="button"
+                  >
+                    <span>
+                      <strong>{question.text}</strong>
+                      <small>{isChecked ? '네, 해당돼요' : '아니요, 해당 안 돼요'}</small>
+                    </span>
+                    <i aria-hidden="true" />
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -1166,7 +1209,7 @@ function getHabitSummary(category: CategoryKey, checked: number) {
 
 function getLevelClassName(level: CategoryScore['level']) {
   if (level === '양호') return 'level-badge good'
-  if (level === '관리 참고') return 'level-badge reference'
+  if (level === '점검 필요') return 'level-badge reference'
   return 'level-badge attention'
 }
 
