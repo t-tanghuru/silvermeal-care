@@ -46,7 +46,7 @@ const categories: Category[] = [
   {
     key: 'pressure',
     title: '혈압 관리',
-    icon: '🫀',
+    icon: 'ti ti-heartbeat',
     short: '짠 음식, 국물 음식, 가공식품 습관 확인',
     detail:
       '혈압 관리가 걱정된다면 짠 음식, 국물 음식, 가공식품 섭취 습관을 점검해보면 도움이 돼요. 두통이나 어지러움을 자주 느낀다면 나트륨 섭취 습관부터 함께 살펴보세요.',
@@ -58,7 +58,7 @@ const categories: Category[] = [
   {
     key: 'glucose',
     title: '혈당 관리',
-    icon: '🍚',
+    icon: 'ti ti-candy',
     short: '단 음료, 간식, 식사 시간 확인',
     detail:
       '혈당 관리가 걱정된다면 단 음료, 간식, 불규칙한 식사 시간을 점검해보면 도움이 돼요. 식후 졸림이 심하거나 쉽게 피로하다면 식사 습관을 함께 살펴보세요.',
@@ -70,7 +70,7 @@ const categories: Category[] = [
   {
     key: 'muscle',
     title: '근육 건강',
-    icon: '💪',
+    icon: 'ti ti-barbell',
     short: '단백질 섭취, 활동량, 체중 변화 확인',
     detail:
       '근육은 걷기, 균형 잡기, 자세 유지 같은 일상 움직임에 중요한 역할을 해요. 무릎이나 허리가 자주 불편하다면 단백질 섭취와 활동량을 점검해보면 좋아요.',
@@ -82,7 +82,7 @@ const categories: Category[] = [
   {
     key: 'nutrition',
     title: '영양 보충',
-    icon: '🥣',
+    icon: 'ti ti-apple',
     short: '식사량, 규칙적인 식사, 편식 확인',
     detail:
       '식사량이 줄거나 체중 변화가 있다면 편식 여부와 식사 횟수를 함께 점검해보면 도움이 돼요. 기력이 떨어지거나 활동이 힘들게 느껴질 때도 함께 살펴보세요.',
@@ -94,7 +94,7 @@ const categories: Category[] = [
   {
     key: 'gut',
     title: '장 건강',
-    icon: '💧',
+    icon: 'ti ti-droplet',
     short: '수분, 식이섬유, 배변 상태 확인',
     detail:
       '배변이 불편하거나 속이 자주 더부룩하다면 수분과 식이섬유 섭취 습관을 점검해보면 도움이 돼요.',
@@ -316,9 +316,14 @@ function App() {
   return (
     <main className="app-frame">
       <header className="app-header">
-        <div>
-          <p className="eyebrow">SilverMeal Care</p>
-          <h1>{getTabTitle(activeTab)}</h1>
+        <div className="brand-row">
+          <span aria-hidden="true" className="brand-mark">
+            <i className="ti ti-leaf" />
+          </span>
+          <div>
+            <p className="eyebrow">SilverMeal Care</p>
+            <h1>{getTabTitle(activeTab)}</h1>
+          </div>
         </div>
       </header>
 
@@ -557,9 +562,14 @@ function Home({
 
       <section className="meal-status-panel">
         <div className="section-title-row">
-          <div>
-            <h2>오늘 식사 기록</h2>
-            <p>{todayLogs.length > 0 ? `오늘 ${todayLogs.length}회 기록했어요` : '아직 기록된 식사가 없어요'}</p>
+          <div className="panel-heading">
+            <span aria-hidden="true" className="icon-button">
+              <i className="ti ti-soup" />
+            </span>
+            <div>
+              <h2>오늘 식사 기록</h2>
+              <p>{todayLogs.length > 0 ? `오늘 ${todayLogs.length}회 기록했어요` : '아직 기록된 식사가 없어요'}</p>
+            </div>
           </div>
           <button className="primary-button" onClick={() => onMoveTab('meals')} type="button">
             식사 입력
@@ -883,7 +893,9 @@ function Guide({ categoryScores }: { categoryScores: CategoryScore[] }) {
         </div>
         <section className="guide-detail">
           <div className="guide-card-head">
-            <span className="category-icon">{selectedCategory.icon}</span>
+            <span className="category-icon">
+              <i aria-hidden="true" className={selectedCategory.icon} />
+            </span>
             <h2>{selectedCategory.title}</h2>
           </div>
           <div className="tag-row">
@@ -915,7 +927,9 @@ function Guide({ categoryScores }: { categoryScores: CategoryScore[] }) {
           type="button"
         >
           <div className="guide-card-head">
-            <span className="category-icon">{category.icon}</span>
+            <span className="category-icon">
+              <i aria-hidden="true" className={category.icon} />
+            </span>
             <h2>{category.title}</h2>
             <span aria-hidden="true" className="guide-chevron">
               ›
@@ -1043,7 +1057,7 @@ function QuestionList({
                 } as CSSProperties
               }
             >
-              {category.icon} {category.title}
+              <i aria-hidden="true" className={category.icon} /> {category.title}
             </p>
             <div className="question-list">
               {categoryQuestions.map((question) => {
@@ -1085,7 +1099,9 @@ function ResultCards({
       {categoryScores.map((category) => (
         <article className="result-card" key={category.key}>
           <div className="result-card-head">
-            <span className="category-icon">{category.icon}</span>
+            <span className="category-icon">
+              <i aria-hidden="true" className={category.icon} />
+            </span>
             <h2>{category.title}</h2>
             <strong className={getLevelClassName(category.level)}>{category.level}</strong>
           </div>
@@ -1113,11 +1129,11 @@ function BottomNav({
   onChangeTab: (tab: MainTab) => void
 }) {
   const tabs: Array<[MainTab, string, string]> = [
-    ['home', '홈', '🏠'],
-    ['meals', '식사', '🍚'],
-    ['check', '점검', '📋'],
-    ['guide', '가이드', '📖'],
-    ['settings', '설정', '⚙️'],
+    ['home', '홈', 'ti ti-home'],
+    ['meals', '식사', 'ti ti-soup'],
+    ['check', '점검', 'ti ti-clipboard-check'],
+    ['guide', '가이드', 'ti ti-book-2'],
+    ['settings', '설정', 'ti ti-settings'],
   ]
 
   return (
@@ -1129,7 +1145,7 @@ function BottomNav({
           onClick={() => onChangeTab(id)}
           type="button"
         >
-          <span>{icon}</span>
+          <i aria-hidden="true" className={icon} />
           {label}
         </button>
       ))}

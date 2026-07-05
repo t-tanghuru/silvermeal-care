@@ -18,6 +18,31 @@
   padding: 28px clamp(29px, 6.6vw, 82px);
 }
 
+.brand-row {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+}
+
+.brand-mark {
+  align-items: center;
+  background: #2d875a;
+  border-radius: 10px;
+  color: #eafff0;
+  display: flex;
+  flex: 0 0 auto;
+  font-size: 20px;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.panel-heading {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
 .eyebrow {
   color: #68d19f;
   font-size: 13px;
@@ -98,6 +123,10 @@ p {
   display: grid;
   gap: 18px;
   padding: 24px;
+}
+
+.home-hero {
+  border-left: 4px solid #2d875a;
 }
 
 .home-hero h2,
@@ -817,7 +846,7 @@ select {
   place-items: center;
 }
 
-.bottom-nav button span {
+.bottom-nav button i {
   font-size: 20px;
   line-height: 1;
 }
