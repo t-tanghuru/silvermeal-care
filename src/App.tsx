@@ -525,9 +525,7 @@ function Home({
     day: 'numeric',
     weekday: 'long',
   }).format(new Date())
-  const meals = ['아침', '점심', '저녁']
   const todayLogs = logs.filter((log) => log.date === today)
-  const recordedMeals = meals.filter((meal) => todayLogs.some((log) => log.meal === meal))
   const summaryChips = hasCheckResult
     ? highlighted.length > 0
       ? highlighted.slice(0, 3).map((category) => category.title)
@@ -554,23 +552,11 @@ function Home({
         <div className="section-title-row">
           <div>
             <h2>오늘 식사 기록</h2>
-            <p>{recordedMeals.length > 0 ? `${recordedMeals.length}끼 기록됨` : '아직 기록된 식사가 없어요'}</p>
+            <p>{todayLogs.length > 0 ? `오늘 ${todayLogs.length}회 기록했어요` : '아직 기록된 식사가 없어요'}</p>
           </div>
           <button className="primary-button" onClick={() => onMoveTab('meals')} type="button">
             식사 입력
           </button>
-        </div>
-        <div className="meal-status-grid">
-          {meals.map((meal) => {
-            const isRecorded = recordedMeals.includes(meal)
-
-            return (
-              <article className={isRecorded ? 'recorded' : ''} key={meal}>
-                <strong>{meal}</strong>
-                <span>{isRecorded ? '기록 완료' : '미기록'}</span>
-              </article>
-            )
-          })}
         </div>
       </section>
 

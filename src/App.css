@@ -128,36 +128,6 @@ p {
   margin-top: 8px;
 }
 
-.meal-status-grid {
-  display: grid;
-  gap: 12px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.meal-status-grid article {
-  background: #f8f6ef;
-  border: 1px solid #e3ded2;
-  border-radius: 8px;
-  display: grid;
-  gap: 6px;
-  padding: 16px;
-}
-
-.meal-status-grid article.recorded {
-  background: #e5f4ea;
-  border-color: #c8ddcf;
-}
-
-.meal-status-grid strong {
-  font-size: 18px;
-}
-
-.meal-status-grid span {
-  color: #65716b;
-  font-size: 13px;
-  font-weight: 900;
-}
-
 .summary-chips {
   display: flex;
   flex-wrap: wrap;
@@ -1128,7 +1098,6 @@ input[type='checkbox'] {
   }
 
   .metric-grid,
-  .meal-status-grid,
   .home-actions,
   .result-grid,
   .guide-grid,
